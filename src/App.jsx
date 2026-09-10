@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { PROJECTS } from './data/mockData'
+import { useProjectsWithSheets } from './hooks/useProjectsWithSheets'
 import Layout from './components/Layout'
 import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
@@ -15,7 +15,7 @@ export const DataContext = createContext(null)
 export const useData = () => useContext(DataContext)
 
 export default function App() {
-  const [projects, setProjects] = useState(PROJECTS)
+  const { projects, setProjects, loading, error, hasSheetConfig } = useProjectsWithSheets()
 
   function updateDeviceStatus(projectId, deviceType, sn, newStatus) {
     setProjects(prev => prev.map(p => {
@@ -74,6 +74,39 @@ export default function App() {
       })
       return updated
     })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-50">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-blue-100 mb-4">
+            <div className="animate-spin h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading data...</h2>
+          {hasSheetConfig && <p className="text-sm text-gray-600">Connecting to Google Sheets</p>}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-50">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-red-100 mb-4">
+            <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error loading data</h2>
+          <p className="text-sm text-gray-600 mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Retry
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
