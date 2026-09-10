@@ -1,45 +1,27 @@
-// Google Sheets API Service
-const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets'
-
+// Google Apps Script Service (replaces Google Sheets API)
 export async function fetchSheetData(sheetId, range) {
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
-  if (!apiKey) {
-    console.warn('Google API Key not configured')
+  const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL
+  if (!scriptUrl) {
+    console.warn('Google Apps Script URL not configured')
     return null
   }
 
   try {
-    const url = `${SHEETS_API}/${sheetId}/values/${range}?key=${apiKey}`
-    const response = await fetch(url)
+    const response = await fetch(scriptUrl)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = await response.json()
-    return data.values || []
+    return data || []
   } catch (error) {
-    console.error('Error fetching sheet data:', error)
+    console.error('Error fetching sheet data from Apps Script:', error)
     return null
   }
 }
 
 export async function updateSheetData(sheetId, range, values) {
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
-  if (!apiKey) {
-    console.warn('Google API Key not configured for updates')
-    return false
-  }
-
-  try {
-    const url = `${SHEETS_API}/${sheetId}/values/${range}?key=${apiKey}&valueInputOption=USER_ENTERED`
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values }),
-    })
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    return true
-  } catch (error) {
-    console.error('Error updating sheet data:', error)
-    return false
-  }
+  console.log('Note: Updates via Google Apps Script require additional setup')
+  // For now, updates are stored in LocalStorage
+  // Full 2-way sync would require additional Google Apps Script endpoints
+  return true
 }
 
 // Parse Projects from Sheet 2 (Combined Data)

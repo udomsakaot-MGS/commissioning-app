@@ -9,9 +9,10 @@ export function useProjectsWithSheets() {
   const [useSheets, setUseSheets] = useState(false)
 
   const sheetId = import.meta.env.VITE_GOOGLE_SHEET_ID
-  const hasSheetConfig = !!sheetId
+  const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL
+  const hasSheetConfig = !!scriptUrl || !!sheetId
 
-  // Load projects from Google Sheets if configured
+  // Load projects from Google Apps Script
   useEffect(() => {
     if (!hasSheetConfig) {
       setLoading(false)
@@ -39,7 +40,7 @@ export function useProjectsWithSheets() {
     }
 
     loadFromSheets()
-  }, [sheetId, hasSheetConfig])
+  }, [scriptUrl, hasSheetConfig])
 
   const updateProjects = (newProjects) => {
     setProjects(newProjects)
