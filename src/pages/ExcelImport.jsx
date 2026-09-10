@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx'
 import { GROUP_NAME_MAP } from '../data/mockData'
 import {
   Upload, FileSpreadsheet, CheckCircle, AlertCircle, ChevronDown, ChevronUp,
-  Ticket, Cpu, Search, ArrowRight, Package,
+  Ticket, Cpu, Search, Package,
 } from 'lucide-react'
 
 const TICKET_STORAGE_KEY = 'commissioning_workflow_tickets'
