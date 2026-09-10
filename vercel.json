@@ -2,9 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "env": {
-    "VITE_API_URL": "@vite_api_url",
     "VITE_GOOGLE_SHEET_ID": "@vite_google_sheet_id",
-    "VITE_GOOGLE_API_KEY": "@vite_google_api_key"
+    "VITE_GOOGLE_APPS_SCRIPT_URL": "@vite_google_apps_script_url"
   },
   "rewrites": [
     {
